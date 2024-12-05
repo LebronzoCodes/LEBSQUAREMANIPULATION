@@ -7,15 +7,21 @@ public class GameManager : MonoBehaviour
 {
 
     //Vars
-    public GameObject square;
+    private GameObject square;
     public float waitLength;
     public float anglechoice;
     public float roatspeed;
+    private SpriteRenderer squareColor;
+    public Color startCol;
+    public Color endCol;
+    public float colSpeed;
 
     // Start is called before the first frame update
     void Start()
     {
-        square.SetActive(false);
+        square = this.gameObject;
+        squareColor = square.GetComponent<SpriteRenderer>();
+        squareColor.color = startCol;
         StartCoroutine(WaitandAppear(waitLength));
     }
 
@@ -26,10 +32,11 @@ public class GameManager : MonoBehaviour
     }
 
     IEnumerator WaitandAppear(float waitTime)
-    {
+    { 
         yield return new WaitForSeconds(waitTime);
         square.SetActive(true);
         StartCoroutine(Rotation(anglechoice, roatspeed));
+        StartCoroutine(Colorchange(startCol, endCol, colSpeed));
     }
 
     IEnumerator Rotation(float angle, float roatTime)
@@ -44,6 +51,18 @@ public class GameManager : MonoBehaviour
             square.transform.rotation = Quaternion.Euler(newEuler) * startRotation;
             yield return null;
         }
+    }
+
+    IEnumerator Colorchange(Color startColor, Color endColor, float changeSpeed)
+    {
+        float t = 0;
+        while (squareColor.color != endColor)
+        {
+            t += Time.deltaTime * changeSpeed;
+            squareColor.color = Color.Lerp(startColor, endColor, t);
+            yield return null;
+        }
+
     }
 
 }
