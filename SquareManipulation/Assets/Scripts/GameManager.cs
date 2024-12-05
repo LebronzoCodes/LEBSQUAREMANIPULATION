@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour
         while(t < 1f)
         {
             t = Mathf.Min(1f, t+Time.deltaTime / roatTime);
-            Vector3 newEuler = Vector3.right * (angle + t);
+            Vector3 newEuler = Vector3.right * (angle * t);
             square.transform.rotation = Quaternion.Euler(newEuler) * startRotation;
             yield return null;
         }
